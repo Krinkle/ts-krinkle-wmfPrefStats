@@ -2,19 +2,28 @@ The following queries are done, and sufficient indices in the database schema.
 
 == Main query ==
 
+	Combinations:
+		# items(= timestamp, property, value, sum)
+		"Fetch all items"
+		"Fetch all items by wiki"
+		"Fetch all items by time"
+		"Fetch all items by wiki by time"
+		"Fetch all items from active users"
+		"Fetch all items from active by wiki"
+		"Fetch all items from active by time"
+		"Fetch all items from active by wiki by time"
+
 	Examples:
-		"Current usage of all preferences on all wikis"
-		"Current usage of all preferences on all wikis (by active users)"
-		"Current usage of all preferences on en.wikipedia.org"
-		"Usage of all preferences on all wikis over time (between 2012-09-01 and 2012-10-01)"
-		"Usage of all preferences en.wikipedia.org over time (between 2012-09-01 and 2012-10-01 - by active users)"
+		"Preferences history of en.wikipedia.org"
+		"Preferences currently used on en.wikipedia.org"
+		"Preferences currently used by active users"
 
 	Graph:
 		y-axis: _total_ph_sum
 		x-axis: ph_timestamp
 		line: "{ph_propery}={ph_value}"
 
-	Query:
+	Query: // TODO: Is this query correct?
 		SELECT
 			ph_timestamp,
 			ph_property,
@@ -61,12 +70,15 @@ The following queries are done, and sufficient indices in the database schema.
 
 == Single property ==
 
-	Examples:
-		"Current skin usage on all wikis"
-		"Current skin usage on en.wikipedia.org"
-		"Skin usage on en.wikipedia.org by active users"
-		"Skin usage on all wikis over time (between 2012-09-01 and 2012-10-01)"
-		"Skin usage on en.wikipedia.org over time (between 2012-09-01 and 2012-10-01)"
+	Combinations:
+		"Fetch 1 prop's items"
+		"Fetch 1 prop's items by wiki"
+		"Fetch 1 prop's items by time"
+		"Fetch 1 prop's items by wiki by time"
+		"Fetch 1 prop's items from active users"
+		"Fetch 1 prop's items from active by wiki"
+		"Fetch 1 prop's items from active by time"
+		"Fetch 1 prop's items from active by wiki by time"
 
 	Query:
 		SELECT
@@ -126,6 +138,16 @@ The following queries are done, and sufficient indices in the database schema.
 	Comment:
 		Get a list of possible properties for use in a dropdown menu.
 
+	Combinations:
+		* "Fetch properties"
+		* "Fetch properties by wiki"
+		* "Fetch properties by time"
+		* "Fetch properties by wiki by time"
+		* "Fetch properties from active users  active users"
+		* "Fetch properties from active users by wiki"
+		* "Fetch properties from active users by time"
+		* "Fetch properties from active users by wiki by time"
+
 	Query:
 		SELECT
 			DISTINCT(ph_property) as ph_property
@@ -155,4 +177,3 @@ The following queries are done, and sufficient indices in the database schema.
 			{activeOly}
 				? WHERE ph_sum_active > 0
 				:
-
