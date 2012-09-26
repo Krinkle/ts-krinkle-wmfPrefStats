@@ -1,0 +1,158 @@
+The following queries are done, and sufficient indices in the database schema.
+
+== Main query ==
+
+	Examples:
+		"Current usage of all preferences on all wikis"
+		"Current usage of all preferences on all wikis (by active users)"
+		"Current usage of all preferences on en.wikipedia.org"
+		"Usage of all preferences on all wikis over time (between 2012-09-01 and 2012-10-01)"
+		"Usage of all preferences en.wikipedia.org over time (between 2012-09-01 and 2012-10-01 - by active users)"
+
+	Graph:
+		y-axis: _total_ph_sum
+		x-axis: ph_timestamp
+		line: "{ph_propery}={ph_value}"
+
+	Query:
+		SELECT
+			ph_timestamp,
+			ph_property,
+			ph_value,
+			SUM(ph_sum) as _total_ph_sum
+	
+		FROM property_history
+
+		GROUP BY ph_timestamp
+	
+		ORDER BY
+			ph_timestamp ASC,
+			ph_property ASC,
+			ph_value ASC;
+
+	Options:
+		wikiid: [ "" = global | select wiki | \/ ]
+			 {wikiid}
+			 	? WHERE ph_wikiid={wikiid}
+			 	:
+
+		# (rangeFrom and/or rangeTo) or timestamp
+
+		rangeFrom: [ "" = from begin | YYYYMMDD ]
+			{rangeFrom}
+				? WHERE ph_timestamp >= {rangeFrom}
+				:
+
+		rangeTo: [ "" = up until today | YYYMMDD ]
+			{rangeTo}
+				? WHERE ph_timestamp <= {rangeTo}
+				:
+
+		timestamp: ["" = most recent | YYYMMDD ]
+			WHERE ph_timestamp={timestamp}
+
+		activeOly: [_] Active users only.
+			{activeOly}
+				? SELECT SUM(ph_sum_active) as _total_ph_sum
+				: SELECT SUM(ph_sum_active) as _total_ph_sum
+
+		show/hide lines: (client side)
+
+
+== Single property ==
+
+	Examples:
+		"Current skin usage on all wikis"
+		"Current skin usage on en.wikipedia.org"
+		"Skin usage on en.wikipedia.org by active users"
+		"Skin usage on all wikis over time (between 2012-09-01 and 2012-10-01)"
+		"Skin usage on en.wikipedia.org over time (between 2012-09-01 and 2012-10-01)"
+
+	Query:
+		SELECT
+			ph_timestamp,
+			ph_value,
+			SUM(ph_sum) as _total_ph_sum
+	
+		FROM property_history
+
+		WHERE	ph_property='skin'
+
+		GROUP BY ph_timestamp
+	
+		ORDER BY
+			ph_timestamp ASC,
+			ph_value ASC;
+
+	Options:
+		wikiid: [ "" = global | select wiki | \/ ]
+			 {wikiid}
+			 	? WHERE ph_wikiid={wikiid}
+			 	:
+
+		property*: [ select property ]
+			WHERE ph_property={property}
+
+		rangeFrom: [ "" = from begin | YYYYMMDD ]
+			{rangeFrom}
+				? WHERE ph_timestamp >= {rangeFrom}
+				:
+
+		rangeTo: [ "" = up until today | YYYMMDD ]
+			{rangeTo}
+				? WHERE ph_timestamp <= {rangeTo}
+				:
+
+		activeOly: [_] Active users only.
+			{activeOly}
+				? SELECT SUM(ph_sum_active) as _total_ph_sum
+				: SELECT SUM(ph_sum_active) as _total_ph_sum
+
+		show/hide lines: (client side)
+
+	Graph:
+		y-axis: _total_ph_sum
+		x-axis: ph_timestamp
+		line: ph_value
+
+	Comment:
+		This is essentially the same as "Main query" except the query is slightly simpler,
+		it an probably use the same backend and then the front-end will make sure to diplay
+		label "value" on the lines instead of "key/value".
+
+
+== Fetch properties ==
+
+	Comment:
+		Get a list of possible properties for use in a dropdown menu.
+
+	Query:
+		SELECT
+			DISTINCT(ph_property) as ph_property
+	
+		FROM property_history
+	
+		ORDER BY
+			ph_property ASC;
+
+	Options:
+		wikiid: [ "" = global | select wiki | \/ ]
+			 {wikiid}
+			 	? WHERE ph_wikiid={wikiid}
+			 	:
+
+		rangeFrom: [ "" = from begin | YYYYMMDD ]
+			{rangeFrom}
+				? WHERE ph_timestamp >= {rangeFrom}
+				:
+
+		rangeTo: [ "" = up until today | YYYMMDD ]
+			{rangeTo}
+				? WHERE ph_timestamp <= {rangeTo}
+				:
+
+		activeOly: [_] Properties used by active users only.
+			{activeOly}
+				? WHERE ph_sum_active > 0
+				:
+
