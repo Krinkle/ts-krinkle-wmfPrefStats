@@ -58,14 +58,14 @@ CREATE UNIQUE INDEX i_ph_item ON property_history (ph_wikiid, ph_timestamp, ph_p
 -- * "Fetch all items from active by wiki"
 -- * "Fetch all items from active by time"
 -- * "Fetch all items from active by wiki by time"
--- * "Fetch 1 prop's items"
--- * "Fetch 1 prop's items by wiki"
--- * "Fetch 1 prop's items by time"
--- * "Fetch 1 prop's items by wiki by time"
--- * "Fetch 1 prop's items from active users"
--- * "Fetch 1 prop's items from active by wiki"
--- * "Fetch 1 prop's items from active by time"
--- * "Fetch 1 prop's items from active by wiki by time"
+-- * "Fetch 1 set of prop values"
+-- * "Fetch 1 set of prop values by wiki"
+-- * "Fetch 1 set of prop values by time"
+-- * "Fetch 1 set of prop values by wiki by time"
+-- * "Fetch 1 set of prop values from active users"
+-- * "Fetch 1 set of prop values from active by wiki"
+-- * "Fetch 1 set of prop values from active by time"
+-- * "Fetch 1 set of prop values from active by wiki by time"
 -- * "Fetch properties"
 -- * "Fetch properties by wiki"
 -- * "Fetch properties by time"
@@ -75,4 +75,4 @@ CREATE UNIQUE INDEX i_ph_item ON property_history (ph_wikiid, ph_timestamp, ph_p
 -- * "Fetch properties from active users by time"
 -- * "Fetch properties from active users by wiki by time"
 
-CREATE INDEX i_ph_property property_history (ph_property);
+CREATE INDEX i_ph_foo_bar ON property_history (ph_foo, ph_bar);
